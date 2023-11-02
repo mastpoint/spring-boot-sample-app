@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Clone SoureCode') {
       steps {
-        git branch: 'main', url: 'https://github.com/sreenutech18/spring-boot-sample-app.git'
+        git branch: 'main', url: 'https://github.com/mastpoint/spring-boot-sample-app.git'
 
       }
     }
@@ -66,7 +66,7 @@ pipeline {
 
       steps {
         sh 'docker build -t spring-boot-sample-app:latest .'
-        sh 'docker tag spring-boot-sample-app sreenivas18/spring-boot-sample-app:latest'
+        sh 'docker tag spring-boot-sample-app shankartiwari/spring-boot-sample-app:latest'
       
       }
     }
@@ -83,7 +83,7 @@ pipeline {
 
     stage('Push Image to dockerHUb') {
       steps {
-        sh 'docker push sreenivas18/spring-boot-sample-app:latest'
+        sh 'docker push shankartiwari/spring-boot-sample-app:latest'
       }
       post {
         always {
@@ -101,7 +101,7 @@ pipeline {
           sshagent(credentials: ['awscred']) {
           sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker stop spring-boot-sample-app-dev || true && docker rm spring-boot-sample-app-dev || true'"
       sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker pull shankartiwari/spring-boot-sample-app'"
-          sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker run --name spring-boot-sample-app-dev -d -p 8081:8081 sreenivas18/spring-boot-sample-app'"
+          sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker run --name spring-boot-sample-app-dev -d -p 8081:8081 shankartiwari/spring-boot-sample-app'"
           }
         }
       }
@@ -117,7 +117,7 @@ pipeline {
                     sshagent(credentials: ['awscred']) {
                       sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker stop spring-boot-sample-app-test || true && docker rm spring-boot-sample-app-test || true'"
                       sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker pull shankartiwari/spring-boot-sample-app'"
-                      sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker run --name spring-boot-sample-app-test -d -p 8082:8081 sreenivas18/spring-boot-sample-app'"
+                      sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker run --name spring-boot-sample-app-test -d -p 8082:8081 shankartiwari/spring-boot-sample-app'"
                     }
                 } else {
                     // not do action
