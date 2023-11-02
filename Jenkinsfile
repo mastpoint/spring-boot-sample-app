@@ -6,7 +6,7 @@ pipeline {
   }
   environment {
     DOCKERHUB_CREDENTIALS = credentials('docker_hub_credentials')
-    DEV_EC2_SERVER = '3.7.69.7'
+    DEV_EC2_SERVER = '3.108.55.42'
     DEV_EC2_USER = 'ec2-user'            
   }
 
@@ -55,7 +55,7 @@ pipeline {
     stage("SonarQube analysis") {
 	    steps {
 		  
-		sh 'mvn sonar:sonar -Dsonar.host.url=http://3.7.69.7:9000/ -Dsonar.login=squ_433f1da9822dc261807c56a0af3ca3e6b503a009'
+		sh 'mvn sonar:sonar -Dsonar.host.url=http://3.108.55.42:9000/ -Dsonar.login=squ_682ba5265ed63c41b1410ab5ad845ec39b721653'
 		       
 	      }
       }
@@ -100,7 +100,7 @@ pipeline {
         script {
           sshagent(credentials: ['awscred']) {
           sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker stop spring-boot-sample-app-dev || true && docker rm spring-boot-sample-app-dev || true'"
-      sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker pull sreenivas18/spring-boot-sample-app'"
+      sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker pull shankartiwari/spring-boot-sample-app'"
           sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker run --name spring-boot-sample-app-dev -d -p 8081:8081 sreenivas18/spring-boot-sample-app'"
           }
         }
@@ -116,7 +116,7 @@ pipeline {
                if(userInput == true) {
                     sshagent(credentials: ['awscred']) {
                       sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker stop spring-boot-sample-app-test || true && docker rm spring-boot-sample-app-test || true'"
-                      sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker pull sreenivas18/spring-boot-sample-app'"
+                      sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker pull shankartiwari/spring-boot-sample-app'"
                       sh "ssh -o StrictHostKeyChecking=no ${DEV_EC2_USER}@${DEV_EC2_SERVER} 'docker run --name spring-boot-sample-app-test -d -p 8082:8081 sreenivas18/spring-boot-sample-app'"
                     }
                 } else {
